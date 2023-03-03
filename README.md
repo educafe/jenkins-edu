@@ -1,9 +1,22 @@
 # jenkins-edu
 
+# jenkins Dockerfile
+```
+FROM jenkins/jenkins:2.375.3
+USER root
+RUN apt-get update && apt-get install -y lsb-release
+RUN curl -fsSLo /usr/share/keyrings/docker-archive-keyring.asc \
+  https://download.docker.com/linux/debian/gpg
+RUN echo "deb [arch=$(dpkg --print-architecture) \
+  signed-by=/usr/share/keyrings/docker-archive-keyring.asc] \
+  https://download.docker.com/linux/debian \
+  $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
+RUN apt-get update && apt-get install -y docker-ce-cli
+USER jenkins
+RUN jenkins-plugin-cli --plugins "blueocean docker-workflow"
+```
 # Jenkins 설치 
-```
-docker build -t myjenkins-blueocean:2.332.3-1 .
-```
+docker build -t myjenkins .
 
 ## jenkins network 생성 
 ```
@@ -18,12 +31,12 @@ docker run --name jenkins --restart=on-failure --detach \
   --publish 8080:8080 --publish 50000:50000 \
   --volume jenkins-data:/var/jenkins_home \
   --volume jenkins-docker-certs:/certs/client:ro \
-  myjenkins-blueocean:2.332.3-1
+  myjenkins
 ```
 
 ## 비밀번호 가져오기 
 ```
-docker exec jenkins-blueocean cat /var/jenkins_home/secrets/initialAdminPassword
+docker exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword
 ```
 
 ## jenkins 서버 컨테이너 연결 
@@ -39,7 +52,12 @@ https://www.jenkins.io/doc/book/installing/docker/
 
 https://stackoverflow.com/questions/47709208/how-to-find-docker-host-uri-to-be-used-in-jenkins-docker-plugin
 ```
-docker run -d --restart=always -p 127.0.0.1:2376:2375 --network jenkins -v /var/run/docker.sock:/var/run/docker.sock alpine/socat tcp-listen:2375,fork,reuseaddr unix-connect:/var/run/docker.sock
+docker run -d --restart=always \ 
+-p 127.0.0.1:2376:2375 \ 
+--network jenkins \ 
+-v /var/run/docker.sock:/var/run/docker.sock \ 
+alpine/socat tcp-listen:2375,fork,reuseaddr unix-connect:/var/run/docker.sock
+
 docker inspect <container_id> | grep IPAddress
 ```
 
