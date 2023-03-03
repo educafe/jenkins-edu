@@ -1,6 +1,8 @@
 # jenkins-edu
 
-# jenkins Dockerfile
+# Jenkins 설치 
+
+## jenkins Dockerfile
 ```
 FROM jenkins/jenkins:2.375.3
 USER root
@@ -15,10 +17,10 @@ RUN apt-get update && apt-get install -y docker-ce-cli
 USER jenkins
 RUN jenkins-plugin-cli --plugins "blueocean docker-workflow"
 ```
-# Jenkins 설치 
+## jenkins image build 
 docker build -t myjenkins .
 
-## jenkins network 생성 
+## jenkins 컨테이너 network 생성 
 ```
 docker network create jenkins
 ```
@@ -44,11 +46,13 @@ docker exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword
 https://192.168.56.101:8080/
 ```
 
-## 설치 안내 참조:
+# 설치 안내 참조:
 https://www.jenkins.io/doc/book/installing/docker/
 
 
-## jenkins 컨테이너 agent용 컨테이너 실행 (alpine/socat) 
+# jenkins 컨테이너 agent
+
+## agent 용 컨테이너 실행 (alpine/socat) 
 
 https://stackoverflow.com/questions/47709208/how-to-find-docker-host-uri-to-be-used-in-jenkins-docker-plugin
 ```
@@ -61,7 +65,7 @@ alpine/socat tcp-listen:2375,fork,reuseaddr unix-connect:/var/run/docker.sock
 docker inspect <container_id> | grep IPAddress
 ```
 
-## jenkins python agent 사용하기 
+# jenkins python agent 사용하기 
 ```
 docker pull devopsjourney1/myjenkinsagents:python
 ```
