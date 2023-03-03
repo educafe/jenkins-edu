@@ -1,8 +1,9 @@
 # jenkins-edu
-# jenkins-edu
 
 # Jenkins 설치 
+```
 docker build -t myjenkins-blueocean:2.332.3-1 .
+```
 
 ## jenkins network 생성 
 ```
