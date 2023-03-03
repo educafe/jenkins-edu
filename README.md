@@ -68,4 +68,8 @@ docker inspect <container_id> | grep IPAddress
 # jenkins python agent 사용하기 
 ```
 docker pull devopsjourney1/myjenkinsagents:python
+<<<<<<< HEAD
 ```
+=======
+```
+>>>>>>> 452c6a7bf528bbabef7be145bbfe9eb00e862c81
